@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreApplicationRequest;
-use App\Models\application;
+use App\Models\Application;
 use Auth;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -22,7 +22,7 @@ class ApplicationController extends Controller
         $concernedUser = Auth()->user();
 
         if ($concernedUser->hasRole('Manager')) {
-            $applications = Application::paginate();
+            $applications = Application::orderBy('read', 'asc')->paginate();
 
             foreach ($applications as $k => $v) {
                 empty($applications[$k]->getMedia('public')->first()) ?: $applications[$k]->getMedia('public')->first()->getUrl();
@@ -65,11 +65,17 @@ class ApplicationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param application $application
+     * @param Application $application
      * @return Response
      */
-    public function show(application $application)
+    public function show(Application $application)
     {
         //
+    }
+
+    public function read(int $id)
+    {
+        Application::whereId($id)->update(['read' => true]);
+        return redirect()->back()->with(['message' => 'Статус успешно обновлен']);
     }
 }

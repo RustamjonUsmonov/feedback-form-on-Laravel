@@ -24,6 +24,7 @@ Route::get('/', function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => ['role:Manager|Client']], function () {
         Route::get('/dashboard', [ApplicationController::class, 'index'])->name('applications.index');
+        Route::get('/update/{id}', [ApplicationController::class, 'read'])->name('applications.read');
     });
     Route::group(['middleware' => ['role:Client']], function () {
         Route::post('/send',[ApplicationController::class,'store'])->name('applications.store');
