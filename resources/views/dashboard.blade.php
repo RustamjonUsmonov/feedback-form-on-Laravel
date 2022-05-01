@@ -13,10 +13,10 @@
         <div class="sm:px-6 w-full px-4 md:px-10 py-4 md:py-7">
 
             <div class="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
-                <div class="mt-7 overflow-x-auto">
+                <div class="mt-3 overflow-x-auto">
                     <table class="w-full whitespace-nowrap">
-                        <thead>
-                        <tr>
+                        <thead class="mb-3">
+                        <tr class="mb-3">
                             <th>ID</th>
                             <th>Тема</th>
                             <th>Сообщение</th>
@@ -55,6 +55,7 @@
 
                                 <td class="pl-5">
                                     <div class="flex items-center">
+                                        @if($app->media->first())
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                              viewBox="0 0 20 20"
                                              fill="none">
@@ -66,7 +67,8 @@
                                                 stroke-linejoin="round"
                                             ></path>
                                         </svg>
-                                        <p class="text-sm leading-none text-gray-600 ml-2">04/07</p>
+                                        <a href="{{$app->media->first()->original_url}}" class="text-sm leading-none text-gray-600 ml-2">{{$app->media->first()->file_name}}</a>
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="pl-5">
@@ -136,7 +138,14 @@
                                           placeholder="Сообщение"
                                           class=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"></textarea>
 
+                                <div class="flex">
+                                    <div class="flex-grow w-full ">
+                                        <input type="file" name="file"
+                                               class=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+                                    </div>
+                                </div>
                             </div>
+
                             <hr class="mt-4">
                             <div class="flex flex-row-reverse p-3">
                                 <div class="flex-initial">

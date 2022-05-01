@@ -25,6 +25,7 @@ class StoreApplicationRequest extends FormRequest
     {
         return [
             'topic' => ['required'],
+            'file' => ['nullable'],
             'message' => ['required'],
             'email' => ['required', 'email'],
         ];

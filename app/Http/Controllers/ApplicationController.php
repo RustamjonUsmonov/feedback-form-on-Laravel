@@ -23,6 +23,10 @@ class ApplicationController extends Controller
 
         if ($concernedUser->hasRole('Manager')) {
             $applications = Application::paginate();
+
+            foreach ($applications as $k => $v) {
+                empty($applications[$k]->getMedia('public')->first()) ?: $applications[$k]->getMedia('public')->first()->getUrl();
+            }
             return view('dashboard')->with(compact('applications'));
         } else if ($concernedUser->hasRole('Client')) {
             return view('dashboard');
@@ -45,13 +49,16 @@ class ApplicationController extends Controller
      * Store a newly created resource in storage.
      *
      * @param StoreApplicationRequest $request
-     * @return RedirectResponse|Response
+     * @return RedirectResponse
      */
     public function store(StoreApplicationRequest $request)
     {
         $validated = $request->validated();
         $validated['fullname'] = Auth::user()->name;
-        Application::create($validated);
+        $app = Application::create($validated);
+        if ($request->hasFile('file') && $request->file('file')->isValid()) {
+            $app->addMediaFromRequest('file')->toMediaCollection();
+        }
         return redirect()->back()->with(['message' => 'Заявка отправлена успешно']);
     }
 
