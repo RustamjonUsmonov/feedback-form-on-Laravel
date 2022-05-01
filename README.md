@@ -19,3 +19,6 @@
 > в момент обработки формы и создания заявки отправлять менеджеру email со всеми данными
 >
 > отправку почты реализовать `асинхронно` (используя очереди).
+
+<img src="https://github.com/RustamjonUsmonov/feedback-form-on-Laravel/blob/main/public/images/12.jpg">
+<img src="https://github.com/RustamjonUsmonov/feedback-form-on-Laravel/blob/main/public/images/24.jpg">
