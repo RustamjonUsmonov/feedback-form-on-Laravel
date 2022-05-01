@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreApplicationRequest;
+use App\Jobs\SendEmailJob;
 use App\Models\Application;
 use Auth;
 use Carbon\CarbonImmutable;
@@ -54,7 +55,7 @@ class ApplicationController extends Controller
      */
     public function store(StoreApplicationRequest $request)
     {
-        if (Auth::user()->applications()->first()->toArray()) {
+        if (Auth::user()->applications()->first()) {
             $lastApplicationAt = Auth::user()->applications()->latest()->first()->created_at;
 
             $start = CarbonImmutable::make($lastApplicationAt);
@@ -71,6 +72,8 @@ class ApplicationController extends Controller
         if ($request->hasFile('file') && $request->file('file')->isValid()) {
             $app->addMediaFromRequest('file')->toMediaCollection();
         }
+        SendEmailJob::dispatch($validated);
+        //dispatch(new App\Jobs\SendEmailJob($details));
         return redirect()->back()->with(['message' => 'Заявка отправлена успешно']);
     }
 

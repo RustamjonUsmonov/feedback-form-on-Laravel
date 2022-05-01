@@ -27,6 +27,7 @@
                             <th>Операции</th>
                         </tr>
                         </thead>
+                        <tr class="h-3"></tr>
                         <tbody>
                         @forelse($applications as $app)
                             <tr tabindex="0" class="focus:outline-none  h-16 border border-gray-100 rounded">
@@ -97,7 +98,10 @@
                             <tr class="h-3"></tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="focus:outline-none  h-16 border border-gray-100 rounded text-center"> Нет Записей</td>
+                                <td colspan="7"
+                                    class="focus:outline-none  h-16 border border-gray-100 rounded text-center"> Нет
+                                    Записей
+                                </td>
                             </tr>
                         @endforelse
                         </tbody>
