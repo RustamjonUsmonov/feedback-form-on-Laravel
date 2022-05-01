@@ -13,7 +13,7 @@ class StoreApplicationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class StoreApplicationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'topic' => ['required'],
+            'message' => ['required'],
+            'email' => ['required', 'email'],
         ];
     }
 }

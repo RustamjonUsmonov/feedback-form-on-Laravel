@@ -2,84 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\application;
 use App\Http\Requests\StoreApplicationRequest;
-use App\Http\Requests\UpdateApplicationRequest;
+use App\Models\application;
+use Auth;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 
 class ApplicationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|Factory|View|Response
      */
     public function index()
     {
-        //
+        $concernedUser = Auth()->user();
+
+        if ($concernedUser->hasRole('Manager')) {
+            $applications = Application::paginate();
+            return view('dashboard')->with(compact('applications'));
+        } else if ($concernedUser->hasRole('Client')) {
+            return view('dashboard');
+        } else {
+            abort(403);
+        }
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
-        //
+        return view('dashboard');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreApplicationRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreApplicationRequest $request
+     * @return RedirectResponse|Response
      */
     public function store(StoreApplicationRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $validated['fullname'] = Auth::user()->name;
+        Application::create($validated);
+        return redirect()->back()->with(['message' => 'Заявка отправлена успешно']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\application  $application
-     * @return \Illuminate\Http\Response
+     * @param application $application
+     * @return Response
      */
     public function show(application $application)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\application  $application
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(application $application)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateApplicationRequest  $request
-     * @param  \App\Models\application  $application
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateApplicationRequest $request, application $application)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\application  $application
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(application $application)
     {
         //
     }

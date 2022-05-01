@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,16 +21,14 @@ Route::get('/', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');*/
 
-
-Route::group(['middleware' => ['role:Manager']], function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['auth'])->name('dashboard');
-});
-Route::group(['middleware' => ['role:Client']], function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['auth'])->name('dashboard');
+Route::group(['middleware' => 'auth'], function () {
+    Route::group(['middleware' => ['role:Manager|Client']], function () {
+        Route::get('/dashboard', [ApplicationController::class, 'index']);
+    });
+    Route::group(['middleware' => ['role:Client']], function () {
+        Route::post('/send',[ApplicationController::class,'store'])->name('applications.store');
+    });
 });
 
-require __DIR__.'/auth.php';
+
+require __DIR__ . '/auth.php';
