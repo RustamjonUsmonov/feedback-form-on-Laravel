@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreApplicationRequest;
 use App\Models\Application;
 use Auth;
+use Carbon\CarbonImmutable;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -53,8 +54,19 @@ class ApplicationController extends Controller
      */
     public function store(StoreApplicationRequest $request)
     {
+        if (Auth::user()->applications()->first()->toArray()) {
+            $lastApplicationAt = Auth::user()->applications()->latest()->first()->created_at;
+
+            $start = CarbonImmutable::make($lastApplicationAt);
+            $end = $lastApplicationAt->addDay(1);
+            if (\Carbon\Carbon::now()->between($start, $end)) {
+                return redirect()->back()->withErrors(['Вы уже отправляли заявку сегодня. Следующая возможность появится '.$end->format('d.m.Y H:i')]);
+            }
+        }
+
         $validated = $request->validated();
         $validated['fullname'] = Auth::user()->name;
+        $validated['user_id'] = Auth::id();
         $app = Application::create($validated);
         if ($request->hasFile('file') && $request->file('file')->isValid()) {
             $app->addMediaFromRequest('file')->toMediaCollection();

@@ -15,21 +15,22 @@
             <div class="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
                 <div class="mt-3 overflow-x-auto">
                     <table class="w-full whitespace-nowrap">
-                        <thead class="mb-3">
+                        <thead class="focus:outline-none  h-16 border border-gray-100 rounded">
                         <tr class="mb-3">
-                            <th>ID</th>
+                            <th class="pl-4">ID</th>
                             <th>Тема</th>
                             <th>Сообщение</th>
                             <th>Имя клиента</th>
                             <th>E-mail</th>
                             <th>Файл</th>
                             <th>Создано</th>
+                            <th>Операции</th>
                         </tr>
                         </thead>
                         <tbody>
                         @forelse($applications as $app)
                             <tr tabindex="0" class="focus:outline-none  h-16 border border-gray-100 rounded">
-                                <td>
+                                <td class="pl-4">
                                     {{$loop->iteration}}
                                 </td>
                                 <td class="focus:text-indigo-600 ">
@@ -68,7 +69,7 @@
                                                     stroke-linejoin="round"
                                                 ></path>
                                             </svg>
-                                            <a href="{{$app->media->first()->original_url}}"
+                                            <a href="{{$app->media->first()->original_url}}" target="_blank"
                                                class="text-sm leading-none text-gray-600 ml-2">{{$app->media->first()->file_name}}</a>
                                         @endif
                                     </div>
@@ -96,7 +97,7 @@
                             <tr class="h-3"></tr>
                         @empty
                             <tr>
-                                <td colspan="7"> Нет Записей</td>
+                                <td colspan="7" class="focus:outline-none  h-16 border border-gray-100 rounded text-center"> Нет Записей</td>
                             </tr>
                         @endforelse
                         </tbody>
