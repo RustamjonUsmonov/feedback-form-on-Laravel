@@ -24,7 +24,7 @@ class ApplicationController extends Controller
         $concernedUser = Auth()->user();
 
         if ($concernedUser->hasRole('Manager')) {
-            $applications = Application::orderBy('read', 'asc')->paginate();
+            $applications = Application::orderBy('read', 'asc')->paginate(3);
 
             foreach ($applications as $k => $v) {
                 empty($applications[$k]->getMedia('public')->first()) ?: $applications[$k]->getMedia('public')->first()->getUrl();
